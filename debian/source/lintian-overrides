@@ -1,0 +1,2 @@
+# lib/install/examples/* are fixtures, not webpack examples.
+ruby-webpacker source: package-does-not-install-examples

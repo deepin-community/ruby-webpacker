@@ -1,0 +1,38 @@
+Source: ruby-webpacker
+Section: ruby
+Priority: optional
+Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
+Uploaders: Jongmin Kim <jmkim@pukyong.ac.kr>
+Build-Depends: debhelper (>= 11~),
+               gem2deb,
+               rake,
+               ruby-activesupport (>= 4.2),
+               ruby-bundler,
+               ruby-byebug,
+               ruby-minitest (>= 5.0),
+               ruby-rack-proxy (>= 0.6.1),
+               ruby-railties (>= 2:4.2~),
+Standards-Version: 4.5.0
+Vcs-Git: https://salsa.debian.org/ruby-team/ruby-webpacker.git
+Vcs-Browser: https://salsa.debian.org/ruby-team/ruby-webpacker
+Homepage: https://github.com/rails/webpacker
+Testsuite: autopkgtest-pkg-ruby
+XS-Ruby-Versions: all
+Rules-Requires-Root: no
+
+Package: ruby-webpacker
+Architecture: all
+XB-Ruby-Versions: ${ruby:Versions}
+Depends: ruby | ruby-interpreter,
+         ruby-activesupport (>= 4.2),
+         ruby-bundler,
+         ruby-rack-proxy (>= 0.6.1),
+         ruby-railties (>= 2:4.2~),
+         webpack,
+         ${misc:Depends}
+Recommends: yarnpkg
+Description: Use webpack to manage app-like JavaScript modules in Rails
+ Webpacker makes it easy to use the JavaScript pre-processor and bundler
+ webpack 4.x.x+ to manage application-like JavaScript in Rails. It
+ coexists with the asset pipeline, as the primary purpose for webpack is
+ app-like JavaScript, not images, CSS, or even JavaScript Sprinkles.

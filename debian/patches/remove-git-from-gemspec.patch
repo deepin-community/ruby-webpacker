@@ -1,0 +1,18 @@
+Description: Remove git from gemspec
+ Replace git usage to Ruby syntax. Also, `test_files` was deprecated [1],
+ so removing it.
+ .
+ [1] https://github.com/rubygems/rubygems/issues/735
+Author: Jongmin Kim <jmkim@pukyong.ac.kr>
+Forwarded: not-needed
+Last-Update: 2019-06-22
+--- a/webpacker.gemspec
++++ b/webpacker.gemspec
+@@ -25,6 +25,5 @@
+   s.add_development_dependency "rubocop", "< 0.69"
+   s.add_development_dependency "rubocop-performance"
+ 
+-  s.files         = `git ls-files`.split("\n")
+-  s.test_files    = `git ls-files -- test/*`.split("\n")
++  s.files         = Dir.glob("./lib/**/*") + ["lib/install/config/.browserslistrc"]
+ end

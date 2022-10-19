@@ -1,0 +1,2 @@
+# test/test_app/bin/webpack is not a binary, same as upstream.
+ruby-webpacker binary: script-not-executable

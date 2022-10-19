@@ -1,0 +1,240 @@
+Description: Use system yarnpkg instead of yarn
+ In Debian, yarn is packaged as "yarnpkg".
+ .
+ This patch will replace all the "bin/yarn" usages to "bin/yarnpkg".
+Author: Jongmin Kim <jmkim@pukyong.ac.kr>
+Forwarded: not-needed
+Last-Update: 2019-06-21
+--- a/lib/webpacker/runner.rb
++++ b/lib/webpacker/runner.rb
+@@ -10,7 +10,7 @@
+       @argv = argv
+ 
+       @app_path              = File.expand_path(".", Dir.pwd)
+-      @node_modules_bin_path = ENV["WEBPACKER_NODE_MODULES_BIN_PATH"] || `yarn bin`.chomp
++      @node_modules_bin_path = ENV["WEBPACKER_NODE_MODULES_BIN_PATH"] || `yarnpkg bin`.chomp
+       @webpack_config        = File.join(@app_path, "config/webpack/#{ENV["NODE_ENV"]}.js")
+ 
+       unless File.exist?(@webpack_config)
+--- a/test/dev_server_runner_test.rb
++++ b/test/dev_server_runner_test.rb
+@@ -19,7 +19,7 @@
+   end
+ 
+   def test_run_cmd_via_yarn
+-    cmd = ["yarn", "webpack-dev-server", "--config", "#{test_app_path}/config/webpack/development.js"]
++    cmd = ["yarnpkg", "webpack-dev-server", "--config", "#{test_app_path}/config/webpack/development.js"]
+ 
+     verify_command(cmd, use_node_modules: false)
+   end
+--- a/test/webpack_runner_test.rb
++++ b/test/webpack_runner_test.rb
+@@ -19,7 +19,7 @@
+   end
+ 
+   def test_run_cmd_via_yarn
+-    cmd = ["yarn", "webpack", "--config", "#{test_app_path}/config/webpack/development.js"]
++    cmd = ["yarnpkg", "webpack", "--config", "#{test_app_path}/config/webpack/development.js"]
+ 
+     verify_command(cmd, use_node_modules: false)
+   end
+--- a/lib/webpacker/dev_server_runner.rb
++++ b/lib/webpacker/dev_server_runner.rb
+@@ -49,7 +49,7 @@
+         cmd = if node_modules_bin_exist?
+           ["#{@node_modules_bin_path}/webpack-dev-server"]
+         else
+-          ["yarn", "webpack-dev-server"]
++          ["yarnpkg", "webpack-dev-server"]
+         end
+ 
+         if ARGV.include?("--debug")
+--- a/lib/webpacker/webpack_runner.rb
++++ b/lib/webpacker/webpack_runner.rb
+@@ -9,7 +9,7 @@
+       cmd = if node_modules_bin_exist?
+         ["#{@node_modules_bin_path}/webpack"]
+       else
+-        ["yarn", "webpack"]
++        ["yarnpkg", "webpack"]
+       end
+ 
+       if ARGV.include?("--debug")
+--- a/lib/install/angular.rb
++++ b/lib/install/angular.rb
+@@ -7,7 +7,7 @@
+ directory "#{__dir__}/examples/angular/hello_angular", "#{Webpacker.config.source_path}/hello_angular"
+ 
+ say "Installing all angular dependencies"
+-run "yarn add core-js zone.js rxjs @angular/core @angular/common @angular/compiler @angular/platform-browser @angular/platform-browser-dynamic"
++run "yarnpkg add core-js zone.js rxjs @angular/core @angular/common @angular/compiler @angular/platform-browser @angular/platform-browser-dynamic"
+ 
+ if Rails::VERSION::MAJOR == 5 && Rails::VERSION::MINOR > 1
+   say "You need to enable unsafe-eval rule.", :yellow
+--- a/lib/install/coffee.rb
++++ b/lib/install/coffee.rb
+@@ -20,6 +20,6 @@
+   "#{Webpacker.config.source_entry_path}/hello_coffee.coffee"
+ 
+ say "Installing all Coffeescript dependencies"
+-run "yarn add coffeescript@1.12.7 coffee-loader"
++run "yarnpkg add coffeescript@1.12.7 coffee-loader"
+ 
+ say "Webpacker now supports Coffeescript 🎉", :green
+--- a/lib/install/elm.rb
++++ b/lib/install/elm.rb
+@@ -21,10 +21,10 @@
+   "#{Webpacker.config.source_path}/Main.elm"
+ 
+ say "Installing all Elm dependencies"
+-run "yarn add elm elm-webpack-loader"
+-run "yarn add --dev elm-hot-webpack-loader"
+-run "yarn run elm init"
+-run "yarn run elm make #{Webpacker.config.source_path}/Main.elm"
++run "yarnpkg add elm elm-webpack-loader"
++run "yarnpkg add --dev elm-hot-webpack-loader"
++run "yarnpkg run elm init"
++run "yarnpkg run elm make #{Webpacker.config.source_path}/Main.elm"
+ 
+ say "Updating webpack paths to include .elm file extension"
+ insert_into_file Webpacker.config.config_path, "- .elm\n".indent(4), after: /\s+extensions:\n/
+--- a/lib/install/erb.rb
++++ b/lib/install/erb.rb
+@@ -20,6 +20,6 @@
+   "#{Webpacker.config.source_entry_path}/hello_erb.js.erb"
+ 
+ say "Installing all Erb dependencies"
+-run "yarn add rails-erb-loader"
++run "yarnpkg add rails-erb-loader"
+ 
+ say "Webpacker now supports Erb in JS 🎉", :green
+--- a/lib/install/examples/vue/hello_vue.js
++++ b/lib/install/examples/vue/hello_vue.js
+@@ -49,7 +49,7 @@
+ //
+ // If the project is using turbolinks, install 'vue-turbolinks':
+ //
+-// yarn add vue-turbolinks
++// yarnpkg add vue-turbolinks
+ //
+ // Then uncomment the code block below:
+ //
+--- a/lib/install/react.rb
++++ b/lib/install/react.rb
+@@ -13,6 +13,6 @@
+ insert_into_file Webpacker.config.config_path, "- .jsx\n".indent(4), after: /\s+extensions:\n/
+ 
+ say "Installing all react dependencies"
+-run "yarn add react react-dom @babel/preset-react prop-types babel-plugin-transform-react-remove-prop-types"
++run "yarnpkg add react react-dom @babel/preset-react prop-types babel-plugin-transform-react-remove-prop-types"
+ 
+ say "Webpacker now supports react.js 🎉", :green
+--- a/lib/install/stimulus.rb
++++ b/lib/install/stimulus.rb
+@@ -7,6 +7,6 @@
+ directory "#{__dir__}/examples/stimulus/controllers", "#{Webpacker.config.source_path}/controllers"
+ 
+ say "Installing all Stimulus dependencies"
+-run "yarn add stimulus"
++run "yarnpkg add stimulus"
+ 
+ say "Webpacker now supports Stimulus.js 🎉", :green
+--- a/lib/install/template.rb
++++ b/lib/install/template.rb
+@@ -36,14 +36,14 @@
+ 
+ if Webpacker::VERSION =~ /^[0-9]+\.[0-9]+\.[0-9]+$/
+   say "Installing all JavaScript dependencies [#{Webpacker::VERSION}]"
+-  run "yarn add @rails/webpacker@#{Webpacker::VERSION}"
++  run "yarnpkg add @rails/webpacker@#{Webpacker::VERSION}"
+ else
+   say "Installing all JavaScript dependencies [from prerelease rails/webpacker]"
+-  run "yarn add @rails/webpacker@next"
++  run "yarnpkg add @rails/webpacker@next"
+ end
+ 
+ say "Installing dev server for live reloading"
+-run "yarn add --dev webpack-dev-server"
++run "yarnpkg add --dev webpack-dev-server"
+ 
+ if Rails::VERSION::MAJOR == 5 && Rails::VERSION::MINOR > 1
+   say "You need to allow webpack-dev-server host as allowed origin for connect-src.", :yellow
+--- a/lib/install/typescript.rb
++++ b/lib/install/typescript.rb
+@@ -41,6 +41,6 @@
+   "#{Webpacker.config.source_entry_path}/hello_typescript.ts"
+ 
+ say "Installing all typescript dependencies"
+-run "yarn add typescript ts-loader #{additional_packages}"
++run "yarnpkg add typescript ts-loader #{additional_packages}"
+ 
+ say "Webpacker now supports typescript 🎉", :green
+--- a/lib/install/vue.rb
++++ b/lib/install/vue.rb
+@@ -33,7 +33,7 @@
+   "#{Webpacker.config.source_path}/app.vue"
+ 
+ say "Installing all Vue dependencies"
+-run "yarn add vue vue-loader vue-template-compiler"
++run "yarnpkg add vue vue-loader vue-template-compiler"
+ 
+ if Rails::VERSION::MAJOR == 5 && Rails::VERSION::MINOR > 1
+   say "You need to enable unsafe-eval rule.", :yellow
+--- a/lib/tasks/webpacker/check_yarn.rake
++++ b/lib/tasks/webpacker/check_yarn.rake
+@@ -2,7 +2,7 @@
+   desc "Verifies if Yarn is installed"
+   task :check_yarn do
+     begin
+-      yarn_version = `yarn --version`
++      yarn_version = `yarnpkg --version`
+       raise Errno::ENOENT if yarn_version.blank?
+ 
+       pkg_path = Pathname.new("#{__dir__}/../../../package.json").realpath
+--- a/lib/tasks/webpacker/info.rake
++++ b/lib/tasks/webpacker/info.rake
+@@ -7,13 +7,13 @@
+     $stdout.puts "Rails: #{Rails.version}"
+     $stdout.puts "Webpacker: #{Webpacker::VERSION}"
+     $stdout.puts "Node: #{`node --version`}"
+-    $stdout.puts "Yarn: #{`yarn --version`}"
++    $stdout.puts "Yarn: #{`yarnpkg --version`}"
+ 
+     $stdout.puts "\n"
+     $stdout.puts "@rails/webpacker: \n#{`npm list @rails/webpacker version`}"
+ 
+     $stdout.puts "Is bin/webpack present?: #{File.exist? 'bin/webpack'}"
+     $stdout.puts "Is bin/webpack-dev-server present?: #{File.exist? 'bin/webpack-dev-server'}"
+-    $stdout.puts "Is bin/yarn present?: #{File.exist? 'bin/yarn'}"
++    $stdout.puts "Is /usr/bin/yarnpkg present?: #{File.exist? '/usr/bin/yarnpkg'}"
+   end
+ end
+--- a/lib/tasks/webpacker/yarn_install.rake
++++ b/lib/tasks/webpacker/yarn_install.rake
+@@ -1,7 +1,7 @@
+ namespace :webpacker do
+   desc "Support for older Rails versions. Install all JavaScript dependencies as specified via Yarn"
+   task :yarn_install do
+-    system "yarn install --no-progress"
++    system "yarnpkg install --no-progress"
+ 
+     exit(1) unless $?.success?
+   end
+--- a/lib/webpacker/railtie.rb
++++ b/lib/webpacker/railtie.rb
+@@ -30,13 +30,13 @@
+   #     - add `config.webpacker.check_yarn_integrity = true`
+   initializer "webpacker.yarn_check" do |app|
+     if File.exist?("yarn.lock") && Webpacker.config.config_path.exist? && Webpacker.config.check_yarn_integrity?
+-      output = `yarn check --integrity && yarn check --verify-tree 2>&1`
++      output = `yarnpkg check --integrity && yarnpkg check --verify-tree 2>&1`
+ 
+       unless $?.success?
+         $stderr.puts "\n\n"
+         $stderr.puts "========================================"
+         $stderr.puts "  Your Yarn packages are out of date!"
+-        $stderr.puts "  Please run `yarn install --check-files` to update."
++        $stderr.puts "  Please run `yarnpkg install --check-files` to update."
+         $stderr.puts "========================================"
+         $stderr.puts "\n\n"
+         $stderr.puts "To disable this check, please change `check_yarn_integrity`"

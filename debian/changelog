@@ -1,0 +1,62 @@
+ruby-webpacker (4.2.2-7) unstable; urgency=medium
+
+  * Team Upload
+  * Add yarnpkg to Recommends
+  * Disable tests that require yarnpkg (its testing migration is blocked,
+    we can add it back when it enters testing)
+
+ -- Pirate Praveen <praveen@debian.org>  Thu, 03 Sep 2020 19:34:26 +0530
+
+ruby-webpacker (4.2.2-6) unstable; urgency=medium
+
+  * Team Upload
+  * Drop dependency on yarnpkg
+
+ -- Pirate Praveen <praveen@debian.org>  Fri, 28 Aug 2020 14:46:46 +0530
+
+ruby-webpacker (4.2.2-5) unstable; urgency=medium
+
+  * Team Upload
+  * Source only upload for testing migration
+
+ -- Pirate Praveen <praveen@debian.org>  Fri, 07 Aug 2020 23:16:16 +0530
+
+ruby-webpacker (4.2.2-4) unstable; urgency=medium
+
+  * Team Upload
+  * Don't exclude lib/install/bin
+
+ -- Pirate Praveen <praveen@debian.org>  Tue, 04 Aug 2020 00:42:18 +0530
+
+ruby-webpacker (4.2.2-3) unstable; urgency=medium
+
+  * Team Upload
+  * Update watch file to automaticaly repack
+  * Remove generated files via debian/clean
+  * Include .browserslistrc in file list
+  * Add webpack as dependency
+
+ -- Pirate Praveen <praveen@debian.org>  Mon, 03 Aug 2020 18:34:35 +0000
+
+ruby-webpacker (4.2.2-2) unstable; urgency=medium
+
+  * Team Upload
+  * Skip failing check for nodejs version
+  * Skip failing check for yarnpkg version
+
+ -- Pirate Praveen <praveen@debian.org>  Mon, 03 Aug 2020 23:20:53 +0530
+
+ruby-webpacker (4.2.2-1) unstable; urgency=medium
+
+  * Team Upload
+  * New upstream version 4.2.2
+  * Bump Standards-Version to 4.5.0 (no changes needed)
+  * Refresh patches
+
+ -- Pirate Praveen <praveen@debian.org>  Mon, 03 Aug 2020 22:29:57 +0530
+
+ruby-webpacker (4.0.7-1) unstable; urgency=medium
+
+  * Initial release (Closes: #930918)
+
+ -- Jongmin Kim <jmkim@pukyong.ac.kr>  Mon, 03 Aug 2020 16:48:09 +0530

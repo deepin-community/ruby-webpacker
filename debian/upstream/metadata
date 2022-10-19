@@ -1,0 +1,8 @@
+Name: webpacker
+Repository: https://github.com/rails/webpacker.git
+Repository-Browse: https://github.com/rails/webpacker
+Bug-Database: https://github.com/rails/webpacker/issues
+Bug-Submit: https://github.com/rails/webpacker/issues/new
+Contact: https://github.com/rails/webpacker/issues
+Changelog: https://github.com/rails/webpacker/blob/master/CHANGELOG.md
+Documentation: https://github.com/rails/webpacker/blob/master/README.md
